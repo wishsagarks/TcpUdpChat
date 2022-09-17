@@ -2,28 +2,14 @@ const express = require("express")
 const app = express()
 const cors = require("cors")
 const http = require('http').Server(app);
-const path = require('path')
-const PORT = process.env.PORT || 4000 ;
+const PORT = 4000
 const socketIO = require('socket.io')(http, {
     cors: {
         origin: "http://localhost:3000"
     }
 });
-const __dirname1=path.resolve();
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname1, "/client/build")));
-
-  app.get("*", (req, res) =>
-    res.sendFile(path.resolve(__dirname1, "client", "build", "index.html"))
-  );
-} else {
-  app.get("/", (req, res) => {
-    res.send("API is running..");
-  });
-}
 
 app.use(cors())
-
 let users = []
 
 socketIO.on('connection', (socket) => {
